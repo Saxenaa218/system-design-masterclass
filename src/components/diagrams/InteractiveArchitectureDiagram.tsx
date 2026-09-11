@@ -40,41 +40,41 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {/* Flow Step Header Controller */}
-      <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span className="badge badge-indigo">
+      <div className="workbench-panel" style={{ padding: '18px 22px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span className="badge badge-indigo" style={{ fontSize: '12px' }}>
             Step {currentStep.stepNumber} of {flowSteps.length}
           </span>
-          <h4 style={{ fontSize: '15px', color: 'var(--text-primary)' }}>
+          <h4 style={{ fontSize: '17px', color: 'var(--text-primary)' }}>
             {currentStep.title}
           </h4>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button className="btn btn-secondary" onClick={handlePrev} style={{ padding: '6px 10px' }}>
+          <button className="btn btn-secondary" onClick={handlePrev} style={{ padding: '7px 12px' }}>
             <ChevronLeft size={16} />
           </button>
-          <button className="btn btn-secondary" onClick={handleNext} style={{ padding: '6px 10px' }}>
+          <button className="btn btn-secondary" onClick={handleNext} style={{ padding: '7px 12px' }}>
             <ChevronRight size={16} />
           </button>
         </div>
       </div>
 
       {/* Step Description & Tip Callout */}
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '12px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-        <div style={{ fontSize: '13px', color: 'var(--text-secondary)', flex: 1, minWidth: '240px' }}>
+      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
+        <div style={{ fontSize: '14.5px', color: 'var(--text-secondary)', flex: 1, minWidth: '260px', lineHeight: 1.6 }}>
           {currentStep.description}
         </div>
         {currentStep.highlightTip && (
-          <div style={{ background: 'rgba(99, 102, 241, 0.1)', borderLeft: '3px solid var(--accent-indigo)', padding: '6px 12px', borderRadius: '0 6px 6px 0', fontSize: '11px', color: 'var(--text-primary)', minWidth: '260px' }}>
+          <div style={{ background: 'rgba(99, 102, 241, 0.1)', borderLeft: '3px solid var(--accent-indigo)', padding: '8px 14px', borderRadius: '0 6px 6px 0', fontSize: '13px', color: 'var(--text-primary)', minWidth: '280px', lineHeight: 1.5 }}>
             💡 <strong>Pro Tip:</strong> {currentStep.highlightTip}
           </div>
         )}
       </div>
 
       {/* Interactive SVG Diagram Stage */}
-      <div style={{ display: 'grid', gridTemplateColumns: selectedNode ? '1fr 300px' : '1fr', gap: '16px' }}>
-        <div className="glass-panel" style={{ padding: '20px', minHeight: '380px', position: 'relative', overflowX: 'auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: selectedNode ? '1fr 320px' : '1fr', gap: '16px' }}>
+        <div className="workbench-panel" style={{ padding: '22px', minHeight: '390px', position: 'relative', overflowX: 'auto' }}>
           <svg width="900" height="360" viewBox="0 0 900 360" style={{ width: '100%', height: 'auto' }}>
             <defs>
               <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -117,8 +117,9 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
                     <text
                       x={midX}
                       y={midY - 8}
-                      fill={isEdgeActive ? '#0891b2' : '#64748b'}
-                      fontSize="10"
+                      fill={isEdgeActive ? 'var(--signal-cyan)' : 'var(--text-muted)'}
+                      fontSize="11.5"
+                      fontWeight="600"
                       fontFamily="var(--font-mono)"
                       textAnchor="middle"
                     >
@@ -166,7 +167,7 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
                     height="60"
                     rx="10"
                     fill={isSelected ? 'var(--bg-card-hover)' : 'var(--bg-card)'}
-                    stroke={isActive ? color : isSelected ? 'var(--accent-indigo)' : 'var(--border-glass)'}
+                    stroke={isActive ? color : isSelected ? 'var(--border-active)' : 'var(--border-glass)'}
                     strokeWidth={isActive || isSelected ? 2 : 1}
                   />
 
@@ -182,7 +183,7 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
                     x="60"
                     y="32"
                     fill="var(--text-primary)"
-                    fontSize="11"
+                    fontSize="12.5"
                     fontWeight="700"
                     fontFamily="var(--font-sans)"
                     textAnchor="middle"
@@ -195,7 +196,8 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
                     x="60"
                     y="48"
                     fill="var(--text-muted)"
-                    fontSize="9"
+                    fontSize="10"
+                    fontWeight="600"
                     fontFamily="var(--font-mono)"
                     textAnchor="middle"
                   >
@@ -209,24 +211,24 @@ export const InteractiveArchitectureDiagram: React.FC<Props> = ({ nodes, edges, 
 
         {/* Node Inspection Drawer */}
         {selectedNode && (
-          <div className="glass-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="workbench-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span className="badge badge-indigo">Component Detail</span>
               <button
                 onClick={() => setSelectedNode(null)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px' }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '16px' }}
               >
                 ✕
               </button>
             </div>
 
-            <h4 style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{selectedNode.label}</h4>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+            <h4 style={{ fontSize: '17px', color: 'var(--text-primary)' }}>{selectedNode.label}</h4>
+            <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
               {selectedNode.description}
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.06)', padding: '10px', borderRadius: 'var(--radius-sm)', fontSize: '11px', color: 'var(--text-secondary)' }}>
-              <div style={{ color: 'var(--text-muted)', marginBottom: '4px' }}>Architectural Role:</div>
+            <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '12px', borderRadius: 'var(--radius-sm)', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              <div style={{ color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Architectural Role:</div>
               <strong>Type:</strong> {selectedNode.type.toUpperCase()}<br />
               <strong>Placement:</strong> Coordinate ({selectedNode.x}, {selectedNode.y})
             </div>

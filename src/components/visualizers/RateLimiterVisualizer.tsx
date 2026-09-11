@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Zap, Play, Square, Activity, AlertCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Zap, Play, Square, Activity, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 type AlgorithmType = 'token-bucket' | 'leaky-bucket' | 'fixed-window' | 'sliding-window-log' | 'sliding-window-counter';
 
@@ -14,20 +14,13 @@ interface RequestLog {
 export const RateLimiterVisualizer: React.FC = () => {
   const [algorithm, setAlgorithm] = useState<AlgorithmType>('token-bucket');
   const [capacity, setCapacity] = useState<number>(10);
-  const [refillRate, setRefillRate] = useState<number>(2); // tokens per sec
+  const [refillRate, setRefillRate] = useState<number>(2);
   const [tokens, setTokens] = useState<number>(10);
 
-  // Leaky bucket queue
   const [leakyQueue, setLeakyQueue] = useState<number[]>([]);
-
-  // Sliding window log timestamps (ms)
   const [windowLogs, setWindowLogs] = useState<number[]>([]);
-
-  // Fixed window
   const [fixedCount, setFixedCount] = useState<number>(0);
-  const [windowStart, setWindowStart] = useState<number>(Date.now());
 
-  // Metrics
   const [totalPassed, setTotalPassed] = useState<number>(0);
   const [totalDropped, setTotalDropped] = useState<number>(0);
   const [logs, setLogs] = useState<RequestLog[]>([]);
@@ -55,7 +48,6 @@ export const RateLimiterVisualizer: React.FC = () => {
   useEffect(() => {
     const fixTimer = setInterval(() => {
       setFixedCount(0);
-      setWindowStart(Date.now());
     }, 10000);
     return () => clearInterval(fixTimer);
   }, []);
@@ -70,10 +62,10 @@ export const RateLimiterVisualizer: React.FC = () => {
       if (tokens >= 1) {
         setTokens(prev => prev - 1);
         allowed = true;
-        reason = `Token consumed. ${Math.floor(tokens - 1)} left.`;
+        reason = `Token consumed. ${Math.floor(tokens - 1)} left in bucket.`;
       } else {
         allowed = false;
-        reason = 'No tokens in bucket. Rate limited!';
+        reason = 'No tokens in bucket (429 Rate limited).';
       }
     } else if (algorithm === 'leaky-bucket') {
       if (leakyQueue.length < capacity) {
@@ -94,7 +86,7 @@ export const RateLimiterVisualizer: React.FC = () => {
         reason = 'Window limit reached. Wait for window boundary reset.';
       }
     } else if (algorithm === 'sliding-window-log') {
-      const windowCutoff = now - 5000; // 5s sliding window
+      const windowCutoff = now - 5000;
       const validLogs = windowLogs.filter(t => t > windowCutoff);
       if (validLogs.length < capacity) {
         setWindowLogs([...validLogs, now]);
@@ -106,7 +98,6 @@ export const RateLimiterVisualizer: React.FC = () => {
         reason = 'Exceeded log density in 5.0s window.';
       }
     } else if (algorithm === 'sliding-window-counter') {
-      // Approximation using 70% previous weight + current
       const currentEstimate = fixedCount * 0.8 + 1;
       if (currentEstimate <= capacity) {
         setFixedCount(prev => prev + 1);
@@ -165,29 +156,29 @@ export const RateLimiterVisualizer: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Algorithm Selector Bar */}
-      <div className="glass-panel" style={{ padding: '12px 18px', display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="workbench-panel" style={{ padding: '16px 20px', display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {[
-            { id: 'token-bucket', label: 'Token Bucket (AWS/Stripe)' },
-            { id: 'leaky-bucket', label: 'Leaky Bucket (FIFO Egress)' },
-            { id: 'fixed-window', label: 'Fixed Window Counter' },
-            { id: 'sliding-window-log', label: 'Sliding Window Log (Exact)' },
+            { id: 'token-bucket', label: 'Token Bucket' },
+            { id: 'leaky-bucket', label: 'Leaky Bucket' },
+            { id: 'fixed-window', label: 'Fixed Window' },
+            { id: 'sliding-window-log', label: 'Sliding Window Log' },
             { id: 'sliding-window-counter', label: 'Sliding Window Counter' },
           ].map(algo => (
             <button
               key={algo.id}
               onClick={() => { setAlgorithm(algo.id as AlgorithmType); setTokens(capacity); }}
               className={`btn ${algorithm === algo.id ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ fontSize: '12px', padding: '6px 12px' }}
+              style={{ fontSize: '13px', padding: '7px 14px' }}
             >
               {algo.label}
             </button>
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            Capacity (C): <strong>{capacity}</strong>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
+            Capacity: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{capacity}</strong>
           </div>
           <input
             type="range"
@@ -198,11 +189,11 @@ export const RateLimiterVisualizer: React.FC = () => {
               setCapacity(Number(e.target.value));
               setTokens(Number(e.target.value));
             }}
-            style={{ width: '80px' }}
+            style={{ width: '90px' }}
           />
 
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            Refill (R/s): <strong>{refillRate}</strong>
+          <div style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
+            Refill (R/s): <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{refillRate}</strong>
           </div>
           <input
             type="range"
@@ -210,48 +201,45 @@ export const RateLimiterVisualizer: React.FC = () => {
             max="10"
             value={refillRate}
             onChange={(e) => setRefillRate(Number(e.target.value))}
-            style={{ width: '80px' }}
+            style={{ width: '90px' }}
           />
         </div>
       </div>
 
       {/* Interactive Stage & Controls */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 380px) 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 390px) 1fr', gap: '20px' }}>
         {/* Visual Animated Bucket Stage */}
-        <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-          <span className="badge badge-cyan" style={{ position: 'absolute', top: '15px', left: '15px' }}>
+        <div className="workbench-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+          <span className="badge badge-cyan" style={{ position: 'absolute', top: '16px', left: '16px', fontSize: '12px' }}>
             Live Bucket Chamber
           </span>
 
           <div
             style={{
-              width: '180px',
+              width: '190px',
               height: '240px',
-              border: '3px solid rgba(255, 255, 255, 0.15)',
+              border: '3px solid var(--border-glass)',
               borderTop: 'none',
-              borderRadius: '0 0 24px 24px',
-              marginTop: '40px',
+              borderRadius: '0 0 20px 20px',
+              marginTop: '42px',
               position: 'relative',
-              background: 'rgba(15, 23, 42, 0.5)',
+              background: 'var(--bg-surface)',
               display: 'flex',
               flexDirection: 'column-reverse',
-              padding: '10px',
+              padding: '12px',
               gap: '6px',
               overflow: 'hidden'
             }}
           >
             {algorithm === 'token-bucket' && (
               <>
-                {/* Visual Tokens in Chamber */}
                 {Array.from({ length: Math.floor(tokens) }).map((_, i) => (
                   <div
                     key={`token-${i}`}
                     style={{
                       height: '14px',
-                      background: 'linear-gradient(90deg, #6366f1, #06b6d4)',
-                      borderRadius: '8px',
-                      boxShadow: '0 0 10px rgba(99, 102, 241, 0.5)',
-                      animation: 'pulseGlow 2s infinite'
+                      background: 'linear-gradient(90deg, var(--signal-cyan), var(--signal-cyan-light))',
+                      borderRadius: '4px'
                     }}
                   />
                 ))}
@@ -265,8 +253,8 @@ export const RateLimiterVisualizer: React.FC = () => {
                     key={`leak-${i}`}
                     style={{
                       height: '14px',
-                      background: 'linear-gradient(90deg, #10b981, #34d399)',
-                      borderRadius: '8px'
+                      background: 'linear-gradient(90deg, var(--signal-emerald), var(--signal-emerald-light))',
+                      borderRadius: '4px'
                     }}
                   />
                 ))}
@@ -275,10 +263,10 @@ export const RateLimiterVisualizer: React.FC = () => {
 
             {algorithm !== 'token-bucket' && algorithm !== 'leaky-bucket' && (
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <span style={{ fontSize: '32px', fontWeight: 800, color: '#fff' }}>
+                <span style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {fixedCount} / {capacity}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
                   Requests in window
                 </span>
               </div>
@@ -286,12 +274,12 @@ export const RateLimiterVisualizer: React.FC = () => {
           </div>
 
           <div style={{ marginTop: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: '18px', fontWeight: 800, color: '#fff' }}>
+            <div style={{ fontSize: '19px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
               {algorithm === 'token-bucket' && `${Math.floor(tokens)} / ${capacity} Tokens`}
               {algorithm === 'leaky-bucket' && `${leakyQueue.length} / ${capacity} In Queue`}
               {algorithm.includes('window') && `${fixedCount} / ${capacity} Window Load`}
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
               Refills automatically at +{refillRate} tokens/second
             </div>
           </div>
@@ -300,19 +288,20 @@ export const RateLimiterVisualizer: React.FC = () => {
         {/* Action Controls & Live Stats */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Action Trigger Buttons */}
-          <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary" onClick={handleFireRequest}>
+          <div className="workbench-panel" style={{ padding: '18px 20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button className="btn btn-primary" onClick={handleFireRequest} style={{ fontSize: '13.5px' }}>
               <Zap size={16} /> Fire 1 Request
             </button>
-            <button className="btn btn-secondary" onClick={() => handleBurst(5)}>
-              💥 Fire Burst (5 Reqs)
+            <button className="btn btn-secondary" onClick={() => handleBurst(5)} style={{ fontSize: '13.5px' }}>
+              Burst (5 Reqs)
             </button>
-            <button className="btn btn-secondary" onClick={() => handleBurst(12)}>
-              ⚡ Flood Attack (12 Reqs)
+            <button className="btn btn-secondary" onClick={() => handleBurst(12)} style={{ fontSize: '13.5px' }}>
+              Flood Attack (12 Reqs)
             </button>
             <button
               className={`btn ${isAutoStreaming ? 'btn-rose' : 'btn-cyan'}`}
               onClick={toggleAutoStream}
+              style={{ fontSize: '13.5px' }}
             >
               {isAutoStreaming ? <Square size={16} /> : <Play size={16} />}
               {isAutoStreaming ? 'Stop Traffic Stream' : 'Continuous Stream (10 req/s)'}
@@ -321,35 +310,35 @@ export const RateLimiterVisualizer: React.FC = () => {
 
           {/* Metric KPI Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-            <div className="glass-panel" style={{ padding: '12px 16px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Total Requests</div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#fff' }}>{totalReqs}</div>
+            <div className="workbench-panel" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Total Requests</div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{totalReqs}</div>
             </div>
-            <div className="glass-panel" style={{ padding: '12px 16px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--accent-emerald-light)' }}>200 OK Passed</div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-emerald)' }}>{totalPassed}</div>
+            <div className="workbench-panel" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--signal-emerald-light)' }}>200 OK Passed</div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--signal-emerald)', fontFamily: 'var(--font-mono)' }}>{totalPassed}</div>
             </div>
-            <div className="glass-panel" style={{ padding: '12px 16px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--accent-rose)' }}>429 Throttled</div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-rose)' }}>{totalDropped}</div>
+            <div className="workbench-panel" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--signal-rose)' }}>429 Throttled</div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--signal-rose)', fontFamily: 'var(--font-mono)' }}>{totalDropped}</div>
             </div>
-            <div className="glass-panel" style={{ padding: '12px 16px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--accent-cyan-light)' }}>Pass Rate</div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-cyan)' }}>{passRate}%</div>
+            <div className="workbench-panel" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--signal-cyan-light)' }}>Pass Rate</div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--signal-cyan)', fontFamily: 'var(--font-mono)' }}>{passRate}%</div>
             </div>
           </div>
 
           {/* Live Stream Logs */}
-          <div className="glass-panel" style={{ padding: '16px 20px', flex: 1, maxHeight: '200px', overflowY: 'auto' }}>
-            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Activity size={15} /> Incoming Request Packet Stream
+          <div className="workbench-panel" style={{ padding: '18px 20px', flex: 1, maxHeight: '210px', overflowY: 'auto' }}>
+            <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '10px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Activity size={16} color="var(--signal-cyan)" /> Incoming Request Packet Stream
             </div>
             {logs.length === 0 ? (
-              <div style={{ fontSize: '12px', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                 Click 'Fire 1 Request' or 'Flood Attack' to inspect the rate limiter in action...
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {logs.map(l => (
                   <div
                     key={l.id}
@@ -358,25 +347,25 @@ export const RateLimiterVisualizer: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       background: l.allowed ? 'rgba(16, 185, 129, 0.08)' : 'rgba(244, 63, 94, 0.08)',
-                      borderLeft: `3px solid ${l.allowed ? '#10b981' : '#f43f5e'}`,
-                      padding: '6px 10px',
-                      borderRadius: '0 6px 6px 0',
-                      fontSize: '11px',
+                      borderLeft: `3px solid ${l.allowed ? 'var(--signal-emerald)' : 'var(--signal-rose)'}`,
+                      padding: '8px 12px',
+                      borderRadius: '0 4px 4px 0',
+                      fontSize: '12.5px',
                       fontFamily: 'var(--font-mono)'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       {l.allowed ? (
-                        <CheckCircle2 size={13} color="#10b981" />
+                        <CheckCircle2 size={15} color="var(--signal-emerald)" />
                       ) : (
-                        <AlertCircle size={13} color="#f43f5e" />
+                        <AlertCircle size={15} color="var(--signal-rose)" />
                       )}
-                      <span style={{ color: '#fff', fontWeight: 600 }}>
-                        {l.allowed ? '200 OK' : '429 TOO MANY REQUESTS'}
+                      <span style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
+                        {l.allowed ? '200 OK' : '429 THROTTLED'}
                       </span>
-                      <span style={{ color: 'var(--text-muted)' }}>{l.reason}</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>{l.reason}</span>
                     </div>
-                    <span style={{ color: 'var(--text-dim)' }}>{l.time}</span>
+                    <span style={{ color: 'var(--text-muted)' }}>{l.time}</span>
                   </div>
                 ))}
               </div>

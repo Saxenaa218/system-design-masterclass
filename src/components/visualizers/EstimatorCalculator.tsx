@@ -54,7 +54,6 @@ export const EstimatorCalculator: React.FC = () => {
   const peakQps = Math.round(totalQps * peakMultiplier);
 
   // 2. Storage
-  // Daily writes storage (Bytes)
   const textBytesPerWrite = textKB * 1024;
   const mediaBytesPerWrite = (mediaPct / 100) * (mediaMB * 1024 * 1024);
   const avgPayloadPerWrite = textBytesPerWrite + mediaBytesPerWrite;
@@ -68,15 +67,12 @@ export const EstimatorCalculator: React.FC = () => {
   const multiYearPB = multiYearReplicatedTB / 1024;
 
   // 3. 80/20 RAM Cache Sizing
-  // 20% of daily read volume cached in RAM
   const avgReadPayload = (textKB * 1024) + ((mediaPct / 100) * (mediaMB * 1024 * 1024));
   const dailyReadVolumeGB = (totalDailyReads * avgReadPayload) / (1024 * 1024 * 1024);
   const ramCacheGB = Math.round(dailyReadVolumeGB * 0.2);
   const redis64GbNodes = Math.ceil(ramCacheGB / 64);
 
   // 4. Bandwidth
-  // Ingress = Write QPS * Avg write payload
-  // Egress = Read QPS * Avg read payload
   const ingressBytesPerSec = writeQps * avgPayloadPerWrite;
   const egressBytesPerSec = readQps * avgReadPayload;
   const ingressGbps = ((ingressBytesPerSec * 8) / 1_000_000_000).toFixed(2);
@@ -85,10 +81,10 @@ export const EstimatorCalculator: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Preset Selector */}
-      <div className="glass-panel" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="workbench-panel" style={{ padding: '16px 22px', display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Sparkles size={16} color="var(--accent-amber)" />
-          <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>Load Industry Presets:</span>
+          <Sparkles size={18} color="var(--signal-amber)" />
+          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>Load Industry Benchmark:</span>
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -97,7 +93,7 @@ export const EstimatorCalculator: React.FC = () => {
               key={p.name}
               className="btn btn-secondary"
               onClick={() => applyPreset(p)}
-              style={{ fontSize: '12px', padding: '6px 12px' }}
+              style={{ fontSize: '13px', padding: '7px 14px' }}
             >
               {p.name}
             </button>
@@ -106,61 +102,61 @@ export const EstimatorCalculator: React.FC = () => {
       </div>
 
       {/* Inputs & Controls */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 380px) 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 400px) 1fr', gap: '20px' }}>
         {/* Sliders Column */}
-        <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <h4 style={{ fontSize: '15px', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Calculator size={18} color="var(--accent-indigo)" />
-            Interview Scale Parameters
+        <div className="workbench-panel" style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <h4 style={{ fontSize: '17px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Calculator size={18} color="var(--signal-cyan)" />
+            Interview Scale Inputs
           </h4>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', marginBottom: '6px' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Daily Active Users (DAU):</span>
-              <strong style={{ color: 'var(--accent-indigo-light)' }}>{dau} Million</strong>
+              <strong style={{ color: 'var(--signal-cyan)', fontFamily: 'var(--font-mono)' }}>{dau} Million</strong>
             </div>
             <input type="range" min="1" max="2500" value={dau} onChange={(e) => setDau(Number(e.target.value))} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Reads / User: <strong>{readsPerUser}</strong></div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>Reads / User: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{readsPerUser}</strong></div>
               <input type="range" min="1" max="100" value={readsPerUser} onChange={(e) => setReadsPerUser(Number(e.target.value))} />
             </div>
             <div>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Writes / User: <strong>{writesPerUser}</strong></div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>Writes / User: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{writesPerUser}</strong></div>
               <input type="range" min="0.05" step="0.1" max="50" value={writesPerUser} onChange={(e) => setWritesPerUser(Number(e.target.value))} />
             </div>
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Media Attachment (% of writes):</span>
-              <strong style={{ color: 'var(--accent-cyan)' }}>{mediaPct}% ({mediaMB} MB avg)</strong>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', marginBottom: '6px' }}>
+              <span style={{ color: 'var(--text-secondary)' }}>Media Attachments (% writes):</span>
+              <strong style={{ color: 'var(--signal-cyan)', fontFamily: 'var(--font-mono)' }}>{mediaPct}% ({mediaMB} MB avg)</strong>
             </div>
             <input type="range" min="0" max="100" value={mediaPct} onChange={(e) => setMediaPct(Number(e.target.value))} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Peak Multiplier: <strong>{peakMultiplier}x</strong></div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>Peak Burst: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{peakMultiplier}x</strong></div>
               <input type="range" min="1.5" step="0.5" max="5" value={peakMultiplier} onChange={(e) => setPeakMultiplier(Number(e.target.value))} />
             </div>
             <div>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Retention: <strong>{retentionYears} Years</strong></div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '6px' }}>Retention: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{retentionYears} Years</strong></div>
               <input type="range" min="1" max="10" value={retentionYears} onChange={(e) => setRetentionYears(Number(e.target.value))} />
             </div>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
-            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Replication Factor:</span>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <span style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>Replication Factor:</span>
+            <div style={{ display: 'flex', gap: '8px' }}>
               {[1, 2, 3].map(r => (
                 <button
                   key={r}
                   onClick={() => setReplicationFactor(r)}
                   className={`btn ${replicationFactor === r ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ padding: '4px 10px', fontSize: '11px' }}
+                  style={{ padding: '5px 12px', fontSize: '12.5px' }}
                 >
                   {r}x
                 </button>
@@ -170,100 +166,100 @@ export const EstimatorCalculator: React.FC = () => {
         </div>
 
         {/* Live KPI Metric Cards & Formulas */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '14px' }}>
             {/* QPS */}
-            <div className="glass-panel" style={{ padding: '14px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-indigo-light)' }}>
-                <Cpu size={14} /> Average QPS
+            <div className="workbench-panel" style={{ padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--signal-cyan)', fontWeight: 600 }}>
+                <Cpu size={15} /> Average QPS
               </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>
                 {totalQps.toLocaleString()}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
                 Read: {readQps.toLocaleString()} | Write: {writeQps.toLocaleString()}
               </div>
             </div>
 
             {/* Peak QPS */}
-            <div className="glass-panel" style={{ padding: '14px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-rose)' }}>
-                <Cpu size={14} /> Peak QPS ({peakMultiplier}x)
+            <div className="workbench-panel" style={{ padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--signal-rose)', fontWeight: 600 }}>
+                <Cpu size={15} /> Peak QPS ({peakMultiplier}x)
               </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--accent-rose)', marginTop: '4px' }}>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--signal-rose)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>
                 {peakQps.toLocaleString()}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
                 Burst capacity needed
               </div>
             </div>
 
             {/* Multi-Year Storage */}
-            <div className="glass-panel" style={{ padding: '14px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-cyan-light)' }}>
-                <HardDrive size={14} /> {retentionYears}-Year Storage
+            <div className="workbench-panel" style={{ padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--signal-cyan)', fontWeight: 600 }}>
+                <HardDrive size={15} /> {retentionYears}-Year Storage
               </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--accent-cyan)', marginTop: '4px' }}>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--signal-cyan)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>
                 {multiYearPB >= 1 ? `${multiYearPB.toFixed(1)} PB` : `${Math.round(multiYearReplicatedTB)} TB`}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                {dailyStorageTB >= 1 ? `${dailyStorageTB.toFixed(1)} TB/day` : `${Math.round(dailyStorageGB)} GB/day`} (w/ {replicationFactor}x rep)
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                {dailyStorageTB >= 1 ? `${dailyStorageTB.toFixed(1)} TB/day` : `${Math.round(dailyStorageGB)} GB/day`} (w/ {replicationFactor}x)
               </div>
             </div>
 
             {/* 80/20 RAM Sizing */}
-            <div className="glass-panel" style={{ padding: '14px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-emerald-light)' }}>
-                <Database size={14} /> 80/20 RAM Cache
+            <div className="workbench-panel" style={{ padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--signal-emerald)', fontWeight: 600 }}>
+                <Database size={15} /> 80/20 RAM Cache
               </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--accent-emerald)', marginTop: '4px' }}>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--signal-emerald)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>
                 {ramCacheGB >= 1024 ? `${(ramCacheGB / 1024).toFixed(1)} TB` : `${ramCacheGB} GB`}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
                 ≈ {redis64GbNodes}x 64GB Redis nodes
               </div>
             </div>
 
             {/* Network Bandwidth */}
-            <div className="glass-panel" style={{ padding: '14px 16px', gridColumn: 'span 2' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-amber)' }}>
-                <Wifi size={14} /> Network Bandwidth
+            <div className="workbench-panel" style={{ padding: '16px 18px', gridColumn: 'span 2' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--signal-amber)', fontWeight: 600 }}>
+                <Wifi size={15} /> Network Bandwidth
               </div>
-              <div style={{ display: 'flex', gap: '20px', marginTop: '4px' }}>
+              <div style={{ display: 'flex', gap: '24px', marginTop: '6px' }}>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Ingress:</span>{' '}
-                  <strong style={{ fontSize: '18px', color: '#fff' }}>{ingressGbps} Gbps</strong>
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Ingress:</span>{' '}
+                  <strong style={{ fontSize: '20px', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{ingressGbps} Gbps</strong>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Egress:</span>{' '}
-                  <strong style={{ fontSize: '18px', color: 'var(--accent-amber)' }}>{egressGbps} Gbps</strong>
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Egress:</span>{' '}
+                  <strong style={{ fontSize: '20px', color: 'var(--signal-amber)', fontFamily: 'var(--font-mono)' }}>{egressGbps} Gbps</strong>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Step-by-step Math Explanation */}
-          <div className="glass-panel" style={{ padding: '16px 20px', flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Info size={15} /> Mental Arithmetic Breakdown (45-Second Interview Method)
+          <div className="workbench-panel" style={{ padding: '18px 22px', flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Info size={16} color="var(--signal-cyan)" /> Fast Mental Arithmetic Breakdown
               </div>
               <button
                 className="btn btn-secondary"
                 onClick={() => setShowFormulas(!showFormulas)}
-                style={{ fontSize: '11px', padding: '4px 8px' }}
+                style={{ fontSize: '12px', padding: '5px 10px' }}
               >
                 {showFormulas ? 'Collapse' : 'Expand'}
               </button>
             </div>
 
             {showFormulas && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px', fontFamily: 'var(--font-mono)', color: '#cbd5e1' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 <div>1. Daily Requests = ({dau}M DAU × {readsPerUser + writesPerUser} actions) = {((dau * (readsPerUser + writesPerUser))).toFixed(0)}M reqs/day</div>
-                <div>2. Average QPS = {((dau * (readsPerUser + writesPerUser))).toFixed(0)}M / 100,000 sec = <span style={{ color: 'var(--accent-indigo-light)' }}>{totalQps.toLocaleString()} QPS</span></div>
-                <div>3. Peak QPS = {totalQps.toLocaleString()} × {peakMultiplier} = <span style={{ color: 'var(--accent-rose)' }}>{peakQps.toLocaleString()} QPS</span></div>
-                <div>4. 5-Year Storage = ({dailyStorageTB.toFixed(2)} TB/day × 365 × {retentionYears} × {replicationFactor}) = <span style={{ color: 'var(--accent-cyan)' }}>{multiYearPB >= 1 ? `${multiYearPB.toFixed(1)} PB` : `${Math.round(multiYearReplicatedTB)} TB`}</span></div>
-                <div>5. 80/20 RAM Cache = 20% × {Math.round(dailyReadVolumeGB)} GB read volume = <span style={{ color: 'var(--accent-emerald)' }}>{ramCacheGB} GB RAM</span></div>
+                <div>2. Average QPS = {((dau * (readsPerUser + writesPerUser))).toFixed(0)}M / 100,000 sec = <span style={{ color: 'var(--signal-cyan)', fontWeight: 700 }}>{totalQps.toLocaleString()} QPS</span></div>
+                <div>3. Peak QPS = {totalQps.toLocaleString()} × {peakMultiplier} = <span style={{ color: 'var(--signal-rose)', fontWeight: 700 }}>{peakQps.toLocaleString()} QPS</span></div>
+                <div>4. 5-Year Storage = ({dailyStorageTB.toFixed(2)} TB/day × 365 × {retentionYears} × {replicationFactor}) = <span style={{ color: 'var(--signal-cyan)', fontWeight: 700 }}>{multiYearPB >= 1 ? `${multiYearPB.toFixed(1)} PB` : `${Math.round(multiYearReplicatedTB)} TB`}</span></div>
+                <div>5. 80/20 RAM Cache = 20% × {Math.round(dailyReadVolumeGB)} GB read volume = <span style={{ color: 'var(--signal-emerald)', fontWeight: 700 }}>{ramCacheGB} GB RAM</span></div>
               </div>
             )}
           </div>
