@@ -95,11 +95,11 @@ export const NewsfeedFanoutVisualizer: React.FC = () => {
         {/* Author Post Card */}
         <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: authorType === 'celebrity' ? '#f43f5e' : '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#fff' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: authorType === 'celebrity' ? '#f43f5e' : '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: 'var(--text-primary)' }}>
               {authorType === 'celebrity' ? '★' : 'U'}
             </div>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {authorType === 'celebrity' ? 'Taylor Swift (Celebrity)' : 'John Doe (Regular)'}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -108,7 +108,7 @@ export const NewsfeedFanoutVisualizer: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: 'var(--radius-sm)', fontSize: '13px', color: '#fff' }}>
+          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: 'var(--radius-sm)', fontSize: '13px', color: 'var(--text-primary)' }}>
             "Designing distributed systems with interactive visual simulations! 🚀 #SystemDesign"
           </div>
 
@@ -133,7 +133,7 @@ export const NewsfeedFanoutVisualizer: React.FC = () => {
         {/* Feed Dissemination Flow & Telemetry */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div className="glass-panel" style={{ padding: '18px 20px' }}>
-            <h4 style={{ fontSize: '14px', color: '#fff', marginBottom: '12px' }}>
+            <h4 style={{ fontSize: '14px', color: 'var(--text-primary)', marginBottom: '12px' }}>
               Active Routing Strategy: <span style={{ color: 'var(--accent-cyan)' }}>
                 {model === 'hybrid'
                   ? (authorType === 'celebrity' ? 'Fanout-on-Read (Pull Mode)' : 'Fanout-on-Write (Push Mode)')
@@ -170,7 +170,7 @@ export const NewsfeedFanoutVisualizer: React.FC = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {feedLogs.map((log, i) => (
-                  <div key={i} style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', background: 'rgba(0,0,0,0.3)', padding: '6px 10px', borderRadius: '4px', color: '#e2e8f0' }}>
+                  <div key={i} style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', background: 'rgba(0,0,0,0.3)', padding: '6px 10px', borderRadius: '4px', color: 'var(--text-secondary)' }}>
                     {log}
                   </div>
                 ))}

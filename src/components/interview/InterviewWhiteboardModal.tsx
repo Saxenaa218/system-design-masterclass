@@ -79,7 +79,7 @@ export const InterviewWhiteboardModal: React.FC<Props> = ({ onClose }) => {
         {/* Header & Timer Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
           <div>
-            <h3 style={{ fontSize: '18px', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sparkles size={20} color="var(--accent-indigo)" />
               System Design 45-Minute Interview Sandbox
             </h3>
@@ -91,7 +91,7 @@ export const InterviewWhiteboardModal: React.FC<Props> = ({ onClose }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0,0,0,0.4)', padding: '8px 14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-glass)' }}>
               <Clock size={18} color="var(--accent-cyan)" />
-              <span style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-mono)', color: secondsLeft < 300 ? 'var(--accent-rose)' : '#fff' }}>
+              <span style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-mono)', color: secondsLeft < 300 ? 'var(--accent-rose)' : 'var(--text-primary)' }}>
                 {timeStr}
               </span>
             </div>
@@ -139,7 +139,7 @@ export const InterviewWhiteboardModal: React.FC<Props> = ({ onClose }) => {
 
           {/* Candidate Scratchpad */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
               <FileText size={16} color="var(--accent-cyan)" /> Live Candidate Notes Scratchpad
             </div>
             <textarea
@@ -152,7 +152,7 @@ export const InterviewWhiteboardModal: React.FC<Props> = ({ onClose }) => {
                 border: '1px solid var(--border-glass)',
                 borderRadius: 'var(--radius-md)',
                 padding: '14px',
-                color: '#e2e8f0',
+                color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '12px',
                 lineHeight: 1.6,

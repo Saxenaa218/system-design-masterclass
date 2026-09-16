@@ -123,6 +123,11 @@ export const App: React.FC = () => {
     } catch {}
   };
 
+  const selectChapter = (id: number) => {
+    setSelectedChapterId(id);
+    if (window.matchMedia('(max-width: 760px)').matches) setSidebarOpen(false);
+  };
+
   const masteredCount = Object.values(masteredChapters).filter(Boolean).length;
   const progressPercent = Math.round((masteredCount / CHAPTERS.length) * 100);
 
@@ -175,6 +180,7 @@ export const App: React.FC = () => {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       {/* Precision Top Utility Bar */}
       <header
+        className="app-header"
         style={{
           height: '66px',
           background: 'var(--bg-glass)',
@@ -189,7 +195,7 @@ export const App: React.FC = () => {
           zIndex: 50
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div className="app-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           {/* Enhanced Workbench Sidebar Toggle Button */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -217,19 +223,19 @@ export const App: React.FC = () => {
             </div>
             <div>
               <h1 style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-                System Design Blueprint
+                System Design Field Manual
               </h1>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                Interactive Curriculum • 28 Modules
+                Scenario-driven architecture practice · {CHAPTERS.length} modules
               </div>
             </div>
           </div>
         </div>
 
         {/* Global Action Tools */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {/* Progress Indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', padding: '6px 14px', borderRadius: 'var(--radius-sm)' }}>
+          <div className="progress-card" style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', padding: '6px 14px', borderRadius: 'var(--radius-sm)' }}>
             <Award size={17} color="var(--signal-amber)" />
             <span style={{ fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
               {masteredCount}/{CHAPTERS.length} Mastered ({progressPercent}%)
@@ -269,10 +275,11 @@ export const App: React.FC = () => {
       </header>
 
       {/* Main Workspace Layout */}
-      <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
+      <div className="workspace" style={{ display: 'flex', flex: 1, position: 'relative' }}>
         {/* Left Chapter Navigator Sidebar */}
         {sidebarOpen && (
           <aside
+            className="nav-sidebar"
             style={{
               width: 'var(--sidebar-width)',
               background: 'var(--bg-deep)',
@@ -311,8 +318,8 @@ export const App: React.FC = () => {
               {/* Category Filter Pills Grid */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Curriculum Track
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.01em' }}>
+                    Curriculum track
                   </span>
                   {/* Mastered Quick Filter Toggle */}
                   <button
@@ -352,7 +359,7 @@ export const App: React.FC = () => {
                           borderRadius: 'var(--radius-xs)',
                           background: isCatSelected ? 'var(--signal-cyan)' : 'var(--bg-card)',
                           border: isCatSelected ? '1px solid var(--signal-cyan)' : '1px solid var(--border-glass)',
-                          color: isCatSelected ? '#ffffff' : 'var(--text-secondary)',
+                          color: isCatSelected ? 'var(--primary-foreground)' : 'var(--text-secondary)',
                           fontSize: '12px',
                           fontWeight: 600,
                           cursor: 'pointer',
@@ -368,7 +375,7 @@ export const App: React.FC = () => {
                             fontSize: '10.5px',
                             fontFamily: 'var(--font-mono)',
                             background: isCatSelected ? 'rgba(0,0,0,0.25)' : 'var(--border-subtle)',
-                            color: isCatSelected ? '#ffffff' : 'var(--text-muted)',
+                            color: isCatSelected ? 'var(--primary-foreground)' : 'var(--text-muted)',
                             padding: '1px 5px',
                             borderRadius: '3px',
                             fontWeight: 700
@@ -397,7 +404,7 @@ export const App: React.FC = () => {
                   return (
                     <div
                       key={ch.id}
-                      onClick={() => setSelectedChapterId(ch.id)}
+                      onClick={() => selectChapter(ch.id)}
                       style={{
                         padding: '12px 14px',
                         borderRadius: 'var(--radius-sm)',
@@ -440,10 +447,10 @@ export const App: React.FC = () => {
         )}
 
         {/* Main Content Blueprint Stage */}
-        <main style={{ flex: 1, padding: '28px 36px', maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '22px' }}>
+        <main className="app-main" style={{ flex: 1, padding: '28px 36px', maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '22px' }}>
           {/* Chapter Header Banner */}
-          <div className="workbench-panel" style={{ padding: '26px 30px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
+          <div className="workbench-panel chapter-hero" style={{ padding: '26px 30px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="chapter-hero-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                   <span className="badge badge-indigo" style={{ fontSize: '12px' }}>Chapter {activeChapter.number}</span>
@@ -462,7 +469,7 @@ export const App: React.FC = () => {
               </div>
 
               {/* Mark Mastered & Quiz Action */}
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div className="chapter-actions" style={{ display: 'flex', gap: '10px' }}>
                 <button
                   className={`btn ${masteredChapters[activeChapter.id] ? 'btn-emerald' : 'btn-secondary'}`}
                   onClick={() => toggleMastery(activeChapter.id)}
@@ -490,7 +497,7 @@ export const App: React.FC = () => {
               <p style={{ fontSize: '14.5px', color: 'var(--text-primary)', lineHeight: 1.65 }}>
                 {activeChapter.intuition.analogy}
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px', fontSize: '13px' }}>
+              <div className="insight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px', fontSize: '13px' }}>
                 <div style={{ background: 'rgba(244, 63, 94, 0.06)', borderLeft: '3px solid var(--signal-rose)', padding: '9px 13px', borderRadius: '0 4px 4px 0', color: 'var(--signal-rose)', lineHeight: 1.5 }}>
                   <strong>Why Naive Fails:</strong> {activeChapter.intuition.whyNaiveFails}
                 </div>
@@ -502,7 +509,7 @@ export const App: React.FC = () => {
           </div>
 
           {/* Interactive Navigation Tabs */}
-          <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '10px' }}>
+          <div className="chapter-tabs" style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '10px' }}>
             {[
               { id: 'architecture', label: 'Visual Architecture & Flow', icon: Compass },
               { id: 'lab', label: 'Interactive Simulation Lab', icon: Zap },
@@ -542,7 +549,7 @@ export const App: React.FC = () => {
           {activeTab === 'deepdive' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {activeChapter.deepDiveTopics.map((topic, i) => (
-                <div key={i} className="workbench-panel" style={{ padding: '22px 26px' }}>
+                <div key={i} className="workbench-panel content-card" style={{ padding: '22px 26px' }}>
                   <h4 style={{ fontSize: '17px', color: 'var(--text-primary)', marginBottom: '10px' }}>
                     {topic.title}
                   </h4>
@@ -577,12 +584,12 @@ export const App: React.FC = () => {
           {activeTab === 'tradeoffs' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {activeChapter.tradeoffs.map((t, idx) => (
-                <div key={idx} className="workbench-panel" style={{ padding: '22px 26px' }}>
+                <div key={idx} className="workbench-panel content-card" style={{ padding: '22px 26px' }}>
                   <h4 style={{ fontSize: '17px', color: 'var(--text-primary)', marginBottom: '14px' }}>
                     {t.approachA} vs {t.approachB}
                   </h4>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '14px' }}>
+                  <div className="compare-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '14px' }}>
                     <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '14px 16px', borderRadius: 'var(--radius-sm)' }}>
                       <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--signal-cyan)', marginBottom: '8px' }}>
                         {t.approachA}
@@ -611,7 +618,7 @@ export const App: React.FC = () => {
           )}
 
           {/* Module Pagination Footer */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '18px', borderTop: '1px solid var(--border-subtle)', paddingTop: '18px' }}>
+          <div className="module-pagination" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '18px', borderTop: '1px solid var(--border-subtle)', paddingTop: '18px' }}>
             <button
               className="btn btn-secondary"
               disabled={activeChapter.id <= 1}
@@ -652,8 +659,8 @@ export const App: React.FC = () => {
       )}
 
       {showEstimatorModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
-          <div className="workbench-panel" style={{ maxWidth: '980px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px', position: 'relative' }}>
+        <div className="modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
+          <div className="workbench-panel estimator-modal" style={{ maxWidth: '980px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px', position: 'relative' }}>
             <button
               onClick={() => setShowEstimatorModal(false)}
               style={{ position: 'absolute', top: '16px', right: '18px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}

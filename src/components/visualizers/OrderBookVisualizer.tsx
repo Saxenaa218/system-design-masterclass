@@ -102,7 +102,7 @@ export const OrderBookVisualizer: React.FC = () => {
       {/* Top Ticker Bar */}
       <div className="glass-panel" style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span style={{ fontSize: '18px', fontWeight: 800, color: '#fff' }}>AAPL / USD</span>
+          <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>AAPL / USD</span>
           <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--accent-emerald)' }}>${bestBid.toFixed(2)}</span>
           <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Spread: ${spread}</span>
         </div>
@@ -116,7 +116,7 @@ export const OrderBookVisualizer: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 320px) 1fr minmax(220px, 260px)', gap: '20px' }}>
         {/* Order Entry Form */}
         <div className="glass-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <h4 style={{ fontSize: '14px', color: '#fff' }}>Order Entry (FIX)</h4>
+          <h4 style={{ fontSize: '14px', color: 'var(--text-primary)' }}>Order Entry (FIX)</h4>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
             <button
@@ -160,7 +160,7 @@ export const OrderBookVisualizer: React.FC = () => {
                 step="0.05"
                 value={priceInput}
                 onChange={(e) => setPriceInput(Number(e.target.value))}
-                style={{ background: 'var(--bg-input)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '6px 10px', color: '#fff', fontSize: '13px', width: '100%' }}
+                style={{ background: 'var(--bg-input)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '6px 10px', color: 'var(--text-primary)', fontSize: '13px', width: '100%' }}
               />
             </div>
           )}
@@ -172,7 +172,7 @@ export const OrderBookVisualizer: React.FC = () => {
               step="50"
               value={qtyInput}
               onChange={(e) => setQtyInput(Number(e.target.value))}
-              style={{ background: 'var(--bg-input)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '6px 10px', color: '#fff', fontSize: '13px', width: '100%' }}
+              style={{ background: 'var(--bg-input)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '6px 10px', color: 'var(--text-primary)', fontSize: '13px', width: '100%' }}
             />
           </div>
 
@@ -199,7 +199,7 @@ export const OrderBookVisualizer: React.FC = () => {
                 {bids.map(b => (
                   <div key={b.price} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(16, 185, 129, 0.08)', padding: '5px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
                     <span style={{ color: 'var(--accent-emerald)', fontWeight: 600 }}>${b.price.toFixed(2)}</span>
-                    <span style={{ color: '#fff' }}>{b.qty.toLocaleString()}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{b.qty.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -215,7 +215,7 @@ export const OrderBookVisualizer: React.FC = () => {
                 {asks.map(a => (
                   <div key={a.price} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(244, 63, 94, 0.08)', padding: '5px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
                     <span style={{ color: 'var(--accent-rose)', fontWeight: 600 }}>${a.price.toFixed(2)}</span>
-                    <span style={{ color: '#fff' }}>{a.qty.toLocaleString()}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{a.qty.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -225,7 +225,7 @@ export const OrderBookVisualizer: React.FC = () => {
 
         {/* Trade Tape / Executions */}
         <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
-          <h4 style={{ fontSize: '13px', color: '#fff', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <h4 style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Activity size={14} color="var(--accent-cyan)" /> Real-Time Trades
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto', maxHeight: '220px' }}>
@@ -234,7 +234,7 @@ export const OrderBookVisualizer: React.FC = () => {
                 <span style={{ color: t.side === 'BUY' ? 'var(--accent-emerald)' : 'var(--accent-rose)', fontWeight: 600 }}>
                   ${t.price.toFixed(2)}
                 </span>
-                <span style={{ color: '#fff' }}>{t.qty}</span>
+                <span style={{ color: 'var(--text-primary)' }}>{t.qty}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{t.time.slice(0, 8)}</span>
               </div>
             ))}

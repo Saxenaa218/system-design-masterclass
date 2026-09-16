@@ -118,7 +118,7 @@ export const TrieVisualizer: React.FC = () => {
               border: '1px solid var(--border-glass)',
               borderRadius: 'var(--radius-md)',
               padding: '10px 16px',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '15px',
               outline: 'none',
               width: '100%',
@@ -139,7 +139,7 @@ export const TrieVisualizer: React.FC = () => {
               border: '1px solid var(--border-glass)',
               borderRadius: 'var(--radius-sm)',
               padding: '6px 12px',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '12px',
               width: '130px'
             }}
@@ -154,7 +154,7 @@ export const TrieVisualizer: React.FC = () => {
               border: '1px solid var(--border-glass)',
               borderRadius: 'var(--radius-sm)',
               padding: '6px 8px',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '12px',
               width: '70px'
             }}
@@ -238,7 +238,7 @@ export const TrieVisualizer: React.FC = () => {
                       onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-cyan)'; }}
                       onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-glass)'; }}
                     >
-                      <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>
+                      <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
                         +{child.char} ({child.path})
                       </div>
                       <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
@@ -259,7 +259,7 @@ export const TrieVisualizer: React.FC = () => {
         {/* Precomputed Top-K Autocomplete Results Card */}
         <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h4 style={{ fontSize: '14px', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <h4 style={{ fontSize: '14px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Sparkles size={16} color="var(--accent-amber)" />
               Precomputed Top-5
             </h4>
@@ -283,7 +283,7 @@ export const TrieVisualizer: React.FC = () => {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-dim)' }}>#{idx + 1}</span>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
                       <strong style={{ color: 'var(--accent-cyan)' }}>{searchPrefix}</strong>
                       {s.word.slice(searchPrefix.length)}
                     </span>

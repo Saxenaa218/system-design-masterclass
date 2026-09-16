@@ -68,7 +68,7 @@ export const SnowflakeVisualizer: React.FC = () => {
       <div className="glass-panel" style={{ padding: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div>
-            <h4 style={{ fontSize: '16px', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h4 style={{ fontSize: '16px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Hash size={18} color="var(--accent-indigo)" />
               Twitter Snowflake 64-Bit Structure Dissection
             </h4>
@@ -90,23 +90,23 @@ export const SnowflakeVisualizer: React.FC = () => {
         {/* 64-Bit Visual Ribbon */}
         <div style={{ display: 'flex', width: '100%', height: '38px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-glass)' }}>
           {/* Sign Bit */}
-          <div style={{ width: '2%', background: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '10px', fontWeight: 700 }} title="Sign Bit (1 bit, always 0)">
+          <div style={{ width: '2%', background: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: '10px', fontWeight: 700 }} title="Sign Bit (1 bit, always 0)">
             0
           </div>
           {/* Timestamp Bits */}
-          <div style={{ width: '64%', background: 'linear-gradient(90deg, #4338ca, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '11px', fontWeight: 700, gap: '6px' }} title="Epoch Milliseconds (41 bits = 69.7 Years)">
+          <div style={{ width: '64%', background: 'linear-gradient(90deg, #4338ca, #6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: '11px', fontWeight: 700, gap: '6px' }} title="Epoch Milliseconds (41 bits = 69.7 Years)">
             <Clock size={12} /> 41 Bits Timestamp ({timestampBits.slice(0, 8)}...)
           </div>
           {/* Datacenter Bits */}
-          <div style={{ width: '8%', background: '#0891b2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '11px', fontWeight: 700 }} title="Datacenter ID (5 bits = 32 Datacenters)">
+          <div style={{ width: '8%', background: '#0891b2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: '11px', fontWeight: 700 }} title="Datacenter ID (5 bits = 32 Datacenters)">
             DC (5b)
           </div>
           {/* Worker Bits */}
-          <div style={{ width: '8%', background: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '11px', fontWeight: 700 }} title="Worker ID (5 bits = 32 Machines per DC)">
+          <div style={{ width: '8%', background: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: '11px', fontWeight: 700 }} title="Worker ID (5 bits = 32 Machines per DC)">
             W (5b)
           </div>
           {/* Sequence Bits */}
-          <div style={{ width: '18%', background: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '11px', fontWeight: 700 }} title="Sequence Counter (12 bits = 4,096 IDs/ms)">
+          <div style={{ width: '18%', background: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', fontSize: '11px', fontWeight: 700 }} title="Sequence Counter (12 bits = 4,096 IDs/ms)">
             Seq (12b)
           </div>
         </div>
@@ -135,7 +135,7 @@ export const SnowflakeVisualizer: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 340px) 1fr', gap: '20px' }}>
         {/* Controls */}
         <div className="glass-panel" style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h4 style={{ fontSize: '14px', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h4 style={{ fontSize: '14px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Cpu size={16} color="var(--accent-cyan)" /> Node Hardware Parameters
           </h4>
 
@@ -209,7 +209,7 @@ export const SnowflakeVisualizer: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px', maxHeight: '110px', overflowY: 'auto' }}>
               {history.map((h, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
-                  <span style={{ color: '#fff' }}>{h.id.toString()}</span>
+                  <span style={{ color: 'var(--text-primary)' }}>{h.id.toString()}</span>
                   <span style={{ color: 'var(--accent-amber)' }}>Seq: #{h.seq}</span>
                   <span style={{ color: 'var(--text-dim)' }}>{h.time}</span>
                 </div>

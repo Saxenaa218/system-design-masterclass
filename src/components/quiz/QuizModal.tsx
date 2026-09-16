@@ -87,7 +87,7 @@ export const QuizModal: React.FC<Props> = ({ questions, chapterTitle, onClose, o
                   Score: {score}/{questions.length}
                 </span>
               </div>
-              <h3 style={{ fontSize: '16px', color: '#fff', lineHeight: 1.5 }}>
+              <h3 style={{ fontSize: '16px', color: 'var(--text-primary)', lineHeight: 1.5 }}>
                 {currentQ.question}
               </h3>
             </div>
@@ -141,7 +141,7 @@ export const QuizModal: React.FC<Props> = ({ questions, chapterTitle, onClose, o
 
             {/* Explanation & Next */}
             {isAnswered && (
-              <div style={{ background: 'rgba(99, 102, 241, 0.08)', borderLeft: '3px solid var(--accent-indigo)', padding: '12px 16px', borderRadius: '0 8px 8px 0', fontSize: '12px', color: '#cbd5e1', lineHeight: 1.6 }}>
+              <div style={{ background: 'rgba(99, 102, 241, 0.08)', borderLeft: '3px solid var(--accent-indigo)', padding: '12px 16px', borderRadius: '0 8px 8px 0', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 <strong>Explanation:</strong> {currentQ.explanation}
               </div>
             )}
@@ -156,7 +156,7 @@ export const QuizModal: React.FC<Props> = ({ questions, chapterTitle, onClose, o
           /* Results Stage */
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '20px 0' }}>
             <Award size={64} color="var(--accent-amber)" />
-            <h2 style={{ fontSize: '24px', color: '#fff' }}>Knowledge Check Completed!</h2>
+            <h2 style={{ fontSize: '24px', color: 'var(--text-primary)' }}>Knowledge Check Completed!</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
               You scored <strong style={{ color: 'var(--accent-emerald)', fontSize: '18px' }}>{score} / {questions.length}</strong> on <em>{chapterTitle}</em>!
             </p>

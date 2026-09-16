@@ -121,7 +121,7 @@ export const QuorumVisualizer: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 340px) 1fr', gap: '20px' }}>
         {/* Actions Column */}
         <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h4 style={{ fontSize: '14px', color: '#fff' }}>Coordinator Operations</h4>
+          <h4 style={{ fontSize: '14px', color: 'var(--text-primary)' }}>Coordinator Operations</h4>
 
           <div>
             <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Value to write:</label>
@@ -134,7 +134,7 @@ export const QuorumVisualizer: React.FC = () => {
                 border: '1px solid var(--border-glass)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '8px 12px',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '13px',
                 width: '100%'
               }}
@@ -176,7 +176,7 @@ export const QuorumVisualizer: React.FC = () => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>{rep.name}</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{rep.name}</span>
                   <button
                     onClick={() => toggleNodePower(rep.id)}
                     style={{
@@ -195,7 +195,7 @@ export const QuorumVisualizer: React.FC = () => {
 
                 <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px', borderRadius: '6px', fontSize: '12px', fontFamily: 'var(--font-mono)', marginBottom: '8px' }}>
                   <div style={{ color: 'var(--text-dim)', fontSize: '10px' }}>Stored Data:</div>
-                  <div style={{ color: '#fff', fontWeight: 600 }}>{rep.value}</div>
+                  <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{rep.value}</div>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>

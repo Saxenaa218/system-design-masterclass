@@ -161,7 +161,7 @@ export const ConsistentHashingVisualizer: React.FC = () => {
               border: '1px solid var(--border-glass)',
               borderRadius: 'var(--radius-sm)',
               padding: '6px 12px',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '13px',
               outline: 'none',
               width: '140px'
@@ -289,7 +289,7 @@ export const ConsistentHashingVisualizer: React.FC = () => {
                         </button>
                       )}
                     </div>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: '#fff' }}>
+                    <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>
                       {count} <span style={{ fontSize: '11px', fontWeight: 400, color: 'var(--text-muted)' }}>keys ({percent}%)</span>
                     </div>
                     <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>
@@ -323,7 +323,7 @@ export const ConsistentHashingVisualizer: React.FC = () => {
                       fontFamily: 'var(--font-mono)'
                     }}
                   >
-                    <span style={{ color: '#fff' }}>{k.label}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{k.label}</span>
                     <span style={{ color: 'var(--text-dim)', fontSize: '11px' }}>Angle: {k.hash}°</span>
                     <span
                       style={{
@@ -347,7 +347,7 @@ export const ConsistentHashingVisualizer: React.FC = () => {
       <div style={{ background: 'rgba(99, 102, 241, 0.08)', border: '1px solid var(--border-glow)', borderRadius: 'var(--radius-md)', padding: '12px 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <ShieldCheck size={22} color="var(--accent-indigo-light)" />
         <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-          <strong>Intuition in Action:</strong> Click <strong style={{ color: '#fff' }}>Add Server</strong> or trash an existing server. Notice how keys assigned to other unaffected nodes do NOT move at all! Only <strong>1/N</strong> keys are reassigned, completely eliminating cache stampede storms.
+          <strong>Intuition in Action:</strong> Click <strong style={{ color: 'var(--text-primary)' }}>Add Server</strong> or trash an existing server. Notice how keys assigned to other unaffected nodes do NOT move at all! Only <strong>1/N</strong> keys are reassigned, completely eliminating cache stampede storms.
         </span>
       </div>
     </div>
