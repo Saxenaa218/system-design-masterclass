@@ -217,6 +217,28 @@ export const App: React.FC = () => {
             </span>
           </button>
 
+          {/* Mobile sidebar toggle button */}
+          {sidebarOpen === undefined || (sidebarOpen && window.innerWidth < 480) ? (
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="btn btn-rose"
+              style={{
+                padding: '6px 8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-glass)',
+                minWidth: '36px',
+                minHeight: '36px'
+              }}
+              title="Hide navigator"
+            >
+              <X size={18} color="var(--text-muted)" />
+            </button>
+          ) : null}
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', background: 'var(--bg-card)', border: '1px solid var(--border-active)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Layers size={20} color="var(--signal-cyan)" />
@@ -277,11 +299,11 @@ export const App: React.FC = () => {
       {/* Main Workspace Layout */}
       <div className="workspace" style={{ display: 'flex', flex: 1, position: 'relative' }}>
         {/* Left Chapter Navigator Sidebar */}
-        {sidebarOpen && (
+        {sidebarOpen || window.innerWidth >= 480 ? (
           <aside
             className="nav-sidebar"
             style={{
-              width: 'var(--sidebar-width)',
+              width: sidebarOpen ? 'var(--sidebar-width)' : 'var(--sidebar-width-mobile)',
               background: 'var(--bg-deep)',
               borderRight: '1px solid var(--border-glass)',
               display: 'flex',
@@ -289,7 +311,8 @@ export const App: React.FC = () => {
               height: 'calc(100vh - 66px)',
               position: 'sticky',
               top: '66px',
-              zIndex: 40
+              zIndex: 40,
+              transition: 'width 0.3s ease'
             }}
           >
             {/* Redesigned Sidebar Controls & Filter Bar */}
@@ -444,10 +467,10 @@ export const App: React.FC = () => {
               )}
             </div>
           </aside>
-        )}
+        ) : null}
 
         {/* Main Content Blueprint Stage */}
-        <main className="app-main" style={{ flex: 1, padding: '28px 36px', maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '22px' }}>
+        <main className="app-main" style={{ flex: 1, padding: '36px', maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '22px' }}>
           {/* Chapter Header Banner */}
           <div className="workbench-panel chapter-hero" style={{ padding: '26px 30px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="chapter-hero-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px' }}>
@@ -460,10 +483,10 @@ export const App: React.FC = () => {
                   </span>
                 </div>
 
-                <h2 style={{ fontSize: '26px', color: 'var(--text-primary)', marginBottom: '6px' }}>
+                <h2 style={{ fontSize: window.innerWidth < 480 ? '20px' : '26px', color: 'var(--text-primary)', marginBottom: '6px' }}>
                   {activeChapter.title}
                 </h2>
-                <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                <p style={{ fontSize: window.innerWidth < 480 ? '14px' : '15px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                   {activeChapter.summary}
                 </p>
               </div>
@@ -473,8 +496,8 @@ export const App: React.FC = () => {
                 <button
                   className={`btn ${masteredChapters[activeChapter.id] ? 'btn-emerald' : 'btn-secondary'}`}
                   onClick={() => toggleMastery(activeChapter.id)}
-                  style={{ fontSize: '13.5px', padding: '9px 16px' }}
-                >
+style={{ fontSize: window.innerWidth < 480 ? '12px' : '13.5px', padding: window.innerWidth < 480 ? '8px 12px' : '9px 16px' }}
+                  >
                   <CheckCircle2 size={15} />
                   {masteredChapters[activeChapter.id] ? 'Mastered' : 'Mark as Mastered'}
                 </button>
@@ -482,8 +505,8 @@ export const App: React.FC = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() => setShowQuizModal(true)}
-                  style={{ fontSize: '13.5px', padding: '9px 16px' }}
-                >
+style={{ fontSize: window.innerWidth < 480 ? '12px' : '13.5px', padding: window.innerWidth < 480 ? '8px 12px' : '9px 16px' }}
+                  >
                   <Award size={15} /> Knowledge Quiz ({activeChapterQuizzes.length})
                 </button>
               </div>
@@ -491,13 +514,13 @@ export const App: React.FC = () => {
 
             {/* Intuition Callout Card */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--signal-cyan)', fontWeight: 700, fontSize: '13.5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--signal-cyan)', fontWeight: 700, fontSize: window.innerWidth < 480 ? '12px' : '13.5px' }}>
                 <Sparkles size={16} /> Intuitive Analogy & Core Breakthrough
               </div>
-              <p style={{ fontSize: '14.5px', color: 'var(--text-primary)', lineHeight: 1.65 }}>
+              <p style={{ fontSize: window.innerWidth < 480 ? '13px' : '14.5px', color: 'var(--text-primary)', lineHeight: 1.65 }}>
                 {activeChapter.intuition.analogy}
               </p>
-              <div className="insight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px', fontSize: '13px' }}>
+              <div className="insight-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px', fontSize: window.innerWidth < 480 ? '11px' : '13px' }}>
                 <div style={{ background: 'rgba(244, 63, 94, 0.06)', borderLeft: '3px solid var(--signal-rose)', padding: '9px 13px', borderRadius: '0 4px 4px 0', color: 'var(--signal-rose)', lineHeight: 1.5 }}>
                   <strong>Why Naive Fails:</strong> {activeChapter.intuition.whyNaiveFails}
                 </div>
@@ -523,9 +546,9 @@ export const App: React.FC = () => {
                   key={t.id}
                   onClick={() => setActiveTab(t.id as any)}
                   className={`btn ${isActive ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ fontSize: '13.5px', padding: '8px 16px' }}
-                >
-                  <Icon size={15} /> {t.label}
+style={{ fontSize: window.innerWidth < 480 ? '12px' : '13.5px', padding: window.innerWidth < 480 ? '6px 12px' : '8px 16px' }}
+                  >
+                    <Icon size={window.innerWidth < 480 ? 12 : 15} /> {t.label}
                 </button>
               );
             })}
@@ -560,7 +583,7 @@ export const App: React.FC = () => {
                   {topic.codeSnippet && (
                     <div style={{ marginTop: '14px' }}>
                       {topic.codeSnippet.caption && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginBottom: '4px' }}>
+                        <div style={{ fontSize: window.innerWidth < 480 ? '11px' : '12px', color: 'var(--text-dim)', marginBottom: '4px' }}>
                           {topic.codeSnippet.caption}
                         </div>
                       )}
@@ -571,7 +594,7 @@ export const App: React.FC = () => {
                   )}
 
                   {topic.callout && (
-                    <div style={{ marginTop: '14px', background: 'rgba(245, 158, 11, 0.08)', borderLeft: '3px solid var(--signal-amber)', padding: '10px 14px', borderRadius: '0 4px 4px 0', fontSize: '13px', color: 'var(--signal-amber)' }}>
+                    <div style={{ marginTop: '14px', background: 'rgba(245, 158, 11, 0.08)', borderLeft: '3px solid var(--signal-amber)', padding: '10px 14px', borderRadius: '0 4px 4px 0', fontSize: window.innerWidth < 480 ? '11px' : '13px', color: 'var(--signal-amber)' }}>
                       <strong>Note:</strong> {topic.callout.text}
                     </div>
                   )}
@@ -585,31 +608,31 @@ export const App: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {activeChapter.tradeoffs.map((t, idx) => (
                 <div key={idx} className="workbench-panel content-card" style={{ padding: '22px 26px' }}>
-                  <h4 style={{ fontSize: '17px', color: 'var(--text-primary)', marginBottom: '14px' }}>
+                  <h4 style={{ fontSize: window.innerWidth < 480 ? '15px' : '17px', color: 'var(--text-primary)', marginBottom: '14px' }}>
                     {t.approachA} vs {t.approachB}
                   </h4>
 
                   <div className="compare-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '14px' }}>
                     <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '14px 16px', borderRadius: 'var(--radius-sm)' }}>
-                      <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--signal-cyan)', marginBottom: '8px' }}>
+                      <div style={{ fontSize: window.innerWidth < 480 ? '13px' : '14px', fontWeight: 700, color: 'var(--signal-cyan)', marginBottom: '8px' }}>
                         {t.approachA}
                       </div>
-                      <ul style={{ paddingLeft: '18px', fontSize: '13.5px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px', lineHeight: 1.6 }}>
+                      <ul style={{ paddingLeft: '18px', fontSize: window.innerWidth < 480 ? '12px' : '13.5px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px', lineHeight: 1.6 }}>
                         {t.prosA.map((p, pIdx) => <li key={pIdx}>{p}</li>)}
                       </ul>
                     </div>
 
                     <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', padding: '14px 16px', borderRadius: 'var(--radius-sm)' }}>
-                      <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--signal-indigo)', marginBottom: '8px' }}>
+                      <div style={{ fontSize: window.innerWidth < 480 ? '13px' : '14px', fontWeight: 700, color: 'var(--signal-indigo)', marginBottom: '8px' }}>
                         {t.approachB}
                       </div>
-                      <ul style={{ paddingLeft: '18px', fontSize: '13.5px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px', lineHeight: 1.6 }}>
+                      <ul style={{ paddingLeft: '18px', fontSize: window.innerWidth < 480 ? '12px' : '13.5px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px', lineHeight: 1.6 }}>
                         {t.prosB.map((p, pIdx) => <li key={pIdx}>{p}</li>)}
                       </ul>
                     </div>
                   </div>
 
-                  <div style={{ background: 'rgba(16, 185, 129, 0.08)', borderLeft: '3px solid var(--signal-emerald)', padding: '10px 14px', borderRadius: '0 4px 4px 0', fontSize: '13.5px', color: 'var(--signal-emerald)' }}>
+                  <div style={{ background: 'rgba(16, 185, 129, 0.08)', borderLeft: '3px solid var(--signal-emerald)', padding: '10px 14px', borderRadius: '0 4px 4px 0', fontSize: window.innerWidth < 480 ? '12px' : '13.5px', color: 'var(--signal-emerald)' }}>
                     <strong>Senior Engineer Verdict:</strong> {t.verdict}
                   </div>
                 </div>
@@ -623,12 +646,12 @@ export const App: React.FC = () => {
               className="btn btn-secondary"
               disabled={activeChapter.id <= 1}
               onClick={() => setSelectedChapterId(prev => Math.max(1, prev - 1))}
-              style={{ fontSize: '13.5px', padding: '8px 16px' }}
-            >
+style={{ fontSize: window.innerWidth < 480 ? '12px' : '13.5px', padding: window.innerWidth < 480 ? '6px 12px' : '8px 16px' }}
+              >
               <ArrowLeft size={15} /> Previous Module
             </button>
 
-            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: window.innerWidth < 480 ? '12px' : '13px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
               Module {activeChapter.id} of {CHAPTERS.length}
             </span>
 
@@ -636,8 +659,8 @@ export const App: React.FC = () => {
               className="btn btn-primary"
               disabled={activeChapter.id >= CHAPTERS.length}
               onClick={() => setSelectedChapterId(prev => Math.min(CHAPTERS.length, prev + 1))}
-              style={{ fontSize: '13.5px', padding: '8px 16px' }}
-            >
+style={{ fontSize: window.innerWidth < 480 ? '12px' : '13.5px', padding: window.innerWidth < 480 ? '6px 12px' : '8px 16px' }}
+              >
               Next Module ({activeChapter.id + 1}) <ArrowRight size={15} />
             </button>
           </div>
@@ -663,11 +686,11 @@ export const App: React.FC = () => {
           <div className="workbench-panel estimator-modal" style={{ maxWidth: '980px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px', position: 'relative' }}>
             <button
               onClick={() => setShowEstimatorModal(false)}
-              style={{ position: 'absolute', top: '16px', right: '18px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '20px', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: '16px', right: '18px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: window.innerWidth < 480 ? '18px' : '20px', cursor: 'pointer' }}
             >
               ✕
             </button>
-            <h3 style={{ fontSize: '19px', color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: window.innerWidth < 480 ? '17px' : '19px', color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Calculator size={20} color="var(--signal-cyan)" />
               Universal Back-of-the-Envelope Estimation Workbench
             </h3>
